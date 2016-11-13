@@ -16,8 +16,7 @@ namespace ConsoleToDoList
         public int Choose()
         {
             int index;
-            //string element = null;
-            Int32.TryParse(Console.ReadLine(), out index);
+            int.TryParse(Console.ReadLine(), out index);
             index--;
             return index;
         }
@@ -31,7 +30,6 @@ namespace ConsoleToDoList
         public void Delete(List<Entry> list)
         {
             int index = Choose();
-            //string element = null;
             list.RemoveAt(index);
         }
 

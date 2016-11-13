@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -13,18 +14,43 @@ namespace ConsoleToDoList
 
         public void Write(List<Entry> list)
         {
-            IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream(BINFilename, FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, list);
-            stream.Close();
+
+            try
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, list);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to binary serialize. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                stream.Close();
+            }
         }
 
         public List<Entry> Read()
         {
-            IFormatter formatter = new BinaryFormatter();
+            List<Entry> list;
             Stream stream = new FileStream(BINFilename, FileMode.Open, FileAccess.Read, FileShare.Read);
-            List<Entry> list = (List<Entry>) formatter.Deserialize(stream);
-            stream.Close();
+
+            try
+            {
+                IFormatter formatter = new BinaryFormatter();
+                list = (List<Entry>) formatter.Deserialize(stream);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to binary deserialize. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                stream.Close();
+            }
 
             Debug.WriteLine("Liczba odczytanych elementów: {0}", list.Count);
 

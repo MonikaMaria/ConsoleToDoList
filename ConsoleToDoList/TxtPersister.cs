@@ -29,15 +29,19 @@ namespace ConsoleToDoList
             Entry newEntry = new Entry();
             string[] lines = File.ReadAllLines(path);
             var dataLength = 16;
+
+            list.Clear();
+
             foreach (string line in lines)
             {
                 DateTime date = (DateTime.Parse(line.Substring(line.Length - dataLength, dataLength)));
                 string value = line.Substring(0, line.Length-dataLength);
                 newEntry.ValueProperty = value;
                 newEntry.DateProperty = date;
+                list.Add(newEntry);
+                newEntry = new Entry();
             }
-            list.Clear();
-            list.Add(newEntry);
+            
             return list;
         }
     }

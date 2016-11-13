@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 
@@ -12,18 +14,44 @@ namespace ConsoleToDoList
 
         public void Write(List<Entry> list)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Entry>));
             TextWriter tw = new StreamWriter(XMLFilename);
-            serializer.Serialize(tw, list);
-            tw.Close();
+
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Entry>));
+                serializer.Serialize(tw, list);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to serialize to XML. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                tw.Close();
+            }
         }
 
         public List<Entry> Read()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Entry>));
+            List<Entry> list;
             TextReader tr = new StreamReader(XMLFilename);
-            List<Entry> list = (List<Entry>) serializer.Deserialize(tr);
-            tr.Close();
+
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Entry>));
+                list = (List<Entry>)serializer.Deserialize(tr);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to deserialize from XML. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                tr.Close();
+            }     
+            
             return list;
         }
     }
