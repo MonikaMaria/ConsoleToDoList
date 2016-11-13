@@ -80,15 +80,21 @@ namespace ConsoleToDoList
         private void Delete()
         {
             Console.WriteLine("--Podaj numer elementu");
-            manager.Delete(entries);
-            Console.WriteLine("Usunięto.");
+            if (manager.Delete(entries))
+            {
+                Console.WriteLine("Usunięto.");
+            }
+            Console.WriteLine("Nie można usunąć elementu o podanym numerze.");
         }
 
         private void Edit()
         {
             Console.WriteLine("--Podaj: numer elementu, a następnie nową wartość");
-            manager.Edit(entries);
-            Console.WriteLine("Zmieniono.");
+            if (manager.Edit(entries))
+            {
+                Console.WriteLine("Zmieniono.");
+            }
+            Console.WriteLine("Nie można edytować elementu o podanym numerze.");
         }
 
         private void Add()

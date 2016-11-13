@@ -6,11 +6,16 @@ namespace ConsoleToDoList
 {
     internal class EntryManager 
     {
-        public void Edit(List<Entry> list)
+        public bool Edit(List<Entry> list)
         {
-            int index = Choose(); 
-            Entry newEntry = new Entry(Console.ReadLine(), DateTime.Now);
-            list[index] = newEntry;        
+            int index = Choose();
+            if (index < list.Count && index >= 0)
+            {
+                Entry newEntry = new Entry(Console.ReadLine(), DateTime.Now);
+                list[index] = newEntry;
+                return true;
+            }
+            return false;
         }
 
         public int Choose()
@@ -27,10 +32,15 @@ namespace ConsoleToDoList
             list.Add(newEntry);   
         }
 
-        public void Delete(List<Entry> list)
+        public bool Delete(List<Entry> list)
         {
             int index = Choose();
-            list.RemoveAt(index);
+            if (index < list.Count && index >= 0)
+            {
+                list.RemoveAt(index);
+                return true;
+            }
+            return false;
         }
 
         public void Display(List<Entry> list)
